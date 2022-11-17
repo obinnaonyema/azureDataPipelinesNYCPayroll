@@ -176,6 +176,12 @@
 				}
 			}
 		],
+		"parameters": {
+			"pi_param_fiscalyear": {
+				"type": "int",
+				"defaultValue": 2021
+			}
+		},
 		"annotations": [],
 		"lastPublishTime": "2022-11-17T06:44:14Z"
 	},

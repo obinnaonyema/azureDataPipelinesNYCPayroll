@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "summaryDataAggregated",
+				"name": "pipelineSummaryData",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -25,13 +25,6 @@
 							}
 						}
 					},
-					"staging": {
-						"linkedService": {
-							"referenceName": "adlsnycpayrollobinnao",
-							"type": "LinkedServiceReference"
-						},
-						"folderPath": "dirstaging"
-					},
 					"compute": {
 						"coreCount": 8,
 						"computeType": "General"
@@ -46,8 +39,6 @@
 				"defaultValue": 2021
 			}
 		},
-		"annotations": [],
-		"lastPublishTime": "2022-11-17T07:56:13Z"
-	},
-	"type": "Microsoft.DataFactory/factories/pipelines"
+		"annotations": []
+	}
 }
