@@ -1,0 +1,97 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "adf-nyc"
+		},
+		"AzureSynapseAnalytics1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSynapseAnalytics1'"
+		},
+		"adlsnycpayrollobinnao_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'adlsnycpayrollobinnao'"
+		},
+		"db_nycpayroll_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'db_nycpayroll'"
+		},
+		"adlsnycpayrollobinnao_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://adlsnycpayrollobinnao.dfs.core.windows.net/"
+		},
+		"dailyRunTrigger_properties_pipelineSummaryData_parameters_pi_param_fiscalyear": {
+			"type": "int",
+			"defaultValue": 2021
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "adf-nyc_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"AzureSynapseAnalytics1_connectionString": {
+						"value": "[parameters('AzureSynapseAnalytics1_connectionString')]"
+					},
+					"adlsnycpayrollobinnao_accountKey": {
+						"value": "[parameters('adlsnycpayrollobinnao_accountKey')]"
+					},
+					"db_nycpayroll_connectionString": {
+						"value": "[parameters('db_nycpayroll_connectionString')]"
+					},
+					"adlsnycpayrollobinnao_properties_typeProperties_url": {
+						"value": "[parameters('adlsnycpayrollobinnao_properties_typeProperties_url')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "adf-nyc_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"dailyRunTrigger_properties_pipelineSummaryData_parameters_pi_param_fiscalyear": {
+						"value": "[parameters('dailyRunTrigger_properties_pipelineSummaryData_parameters_pi_param_fiscalyear')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'adf-nyc_ArmTemplate_0')]"
+			]
+		}
+	]
+}

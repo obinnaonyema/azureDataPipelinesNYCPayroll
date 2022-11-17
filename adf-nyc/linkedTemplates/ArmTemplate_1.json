@@ -1,0 +1,344 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "adf-nyc"
+		},
+		"dailyRunTrigger_properties_pipelineSummaryData_parameters_pi_param_fiscalyear": {
+			"type": "int",
+			"defaultValue": 2021
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/loadAllData')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "load2021PayrollDataToSQLDb",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "loadPayrollData",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"payrollData": {},
+									"payroll2021Destination": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "loadPayrollToSynapse",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "loadAgencyToSynapse",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "load2021PayrollDataToSQLDb",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "loadEmployeeToSynapse",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "loadTitleToSynapse",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "loadPayrollToSynapse",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"payrollSource": {},
+									"payrollDestination": {}
+								}
+							},
+							"staging": {
+								"linkedService": {
+									"referenceName": "adlsnycpayrollobinnao",
+									"type": "LinkedServiceReference"
+								},
+								"folderPath": "dirstaging"
+							},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "loadAgencyToSynapse",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "loadAgencyToSynapse",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"agencySource": {},
+									"agencyDestination": {}
+								}
+							},
+							"staging": {
+								"linkedService": {
+									"referenceName": "adlsnycpayrollobinnao",
+									"type": "LinkedServiceReference"
+								},
+								"folderPath": "dirstaging"
+							},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "loadEmployeeToSynapse",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "loadEmployeeToSynapse",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"employeeSource": {},
+									"employeeDestination": {}
+								}
+							},
+							"staging": {
+								"linkedService": {
+									"referenceName": "adlsnycpayrollobinnao",
+									"type": "LinkedServiceReference"
+								},
+								"folderPath": "dirstaging"
+							},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "loadTitleToSynapse",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "loadTitleToSynapse",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"titleSource": {},
+									"titleDestination": {}
+								}
+							},
+							"staging": {
+								"linkedService": {
+									"referenceName": "adlsnycpayrollobinnao",
+									"type": "LinkedServiceReference"
+								},
+								"folderPath": "dirstaging"
+							},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-11-17T06:44:14Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipelineSummaryData')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "summaryDataAggregated",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "dataflowAggregatedData",
+								"type": "DataFlowReference",
+								"parameters": {
+									"dataflow_param_fiscalyear": {
+										"value": "@pipeline().parameters.pi_param_fiscalyear",
+										"type": "Expression"
+									}
+								},
+								"datasetParameters": {
+									"payrolldatatable": {},
+									"historicalPayroll": {},
+									"payrollSummaryDestination": {}
+								}
+							},
+							"staging": {
+								"linkedService": {
+									"referenceName": "adlsnycpayrollobinnao",
+									"type": "LinkedServiceReference"
+								},
+								"folderPath": "dirstaging"
+							},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"pi_param_fiscalyear": {
+						"type": "int",
+						"defaultValue": 2021
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-11-17T07:56:13Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dailyRunTrigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "loadAllData",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "pipelineSummaryData",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"pi_param_fiscalyear": "[parameters('dailyRunTrigger_properties_pipelineSummaryData_parameters_pi_param_fiscalyear')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2022-11-17T06:44:00Z",
+						"timeZone": "UTC",
+						"schedule": {
+							"hours": [
+								6
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/loadAllData')]",
+				"[concat(variables('factoryId'), '/pipelines/pipelineSummaryData')]"
+			]
+		}
+	]
+}

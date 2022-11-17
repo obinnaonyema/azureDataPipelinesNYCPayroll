@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adf-nyc"
+		},
+		"AzureSynapseAnalytics1_connectionString": {
+			"value": ""
+		},
+		"adlsnycpayrollobinnao_accountKey": {
+			"value": ""
+		},
+		"db_nycpayroll_connectionString": {
+			"value": ""
+		},
+		"adlsnycpayrollobinnao_properties_typeProperties_url": {
+			"value": "https://adlsnycpayrollobinnao.dfs.core.windows.net/"
+		},
+		"dailyRunTrigger_properties_pipelineSummaryData_parameters_pi_param_fiscalyear": {
+			"value": 2021
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
