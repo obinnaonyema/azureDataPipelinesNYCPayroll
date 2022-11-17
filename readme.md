@@ -17,6 +17,8 @@ The source data resides in Azure Data Lake and needs to be processed in a NYC da
 
 ![deployed resources](images/deployed_resources.PNG)
 
+![synapse pool](images/synapse_pools.PNG)
+
 2. Data was ingested into Azure Datalake Gen2
 
 ![payroll files](images/payroll_files_container.PNG)
@@ -37,4 +39,18 @@ The source data resides in Azure Data Lake and needs to be processed in a NYC da
 
 ![data flows](images/dataflows.PNG)
 
-7
+![aggregated data flow](images/aggregatedDataFlow.PNG)
+
+7. Pipelines were set up. 
+
+![pipelines](images/pipelines.PNG)
+
+8. Having set up all pipelines, pipelines were triggered and monitored. Here are the results:
+
+![load all data](images/masterPipelineRun.PNG)
+
+![aggregated data pipeline run](images/pipeline_run_aggregatedSummary.PNG)
+
+## Challenges
+
+1. Data type errors were resolved by manually setting data types in the Mapping tab of the sink task
