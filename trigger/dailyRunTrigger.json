@@ -1,0 +1,38 @@
+{
+	"name": "dailyRunTrigger",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "loadAllData",
+					"type": "PipelineReference"
+				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "pipelineSummaryData",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"pi_param_fiscalyear": 2021
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2022-11-17T06:44:00Z",
+				"timeZone": "UTC",
+				"schedule": {
+					"hours": [
+						6
+					]
+				}
+			}
+		}
+	}
+}

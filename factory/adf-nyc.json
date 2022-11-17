@@ -1,0 +1,9 @@
+{
+	"name": "adf-nyc",
+	"location": "canadaeast",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "1d940b36-ee72-49e0-b47c-4b11c81f0d25",
+		"tenantId": "9b7cbd77-6d6b-4879-8aba-63d7dfb18472"
+	}
+}
