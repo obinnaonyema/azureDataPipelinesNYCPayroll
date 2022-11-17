@@ -25,6 +25,13 @@
 							}
 						}
 					},
+					"staging": {
+						"linkedService": {
+							"referenceName": "adlsnycpayrollobinnao",
+							"type": "LinkedServiceReference"
+						},
+						"folderPath": "dirstaging"
+					},
 					"compute": {
 						"coreCount": 8,
 						"computeType": "General"
