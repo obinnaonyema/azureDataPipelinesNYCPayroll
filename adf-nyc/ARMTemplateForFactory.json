@@ -242,6 +242,12 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
+				"parameters": {
+					"pi_param_fiscalyear": {
+						"type": "int",
+						"defaultValue": 2021
+					}
+				},
 				"annotations": [],
 				"lastPublishTime": "2022-11-17T06:44:14Z"
 			},
@@ -261,7 +267,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "summaryDataAggregated",
+						"name": "pipelineSummaryData",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [],
 						"policy": {
@@ -313,8 +319,7 @@
 						"defaultValue": 2021
 					}
 				},
-				"annotations": [],
-				"lastPublishTime": "2022-11-17T07:56:13Z"
+				"annotations": []
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/dataflowAggregatedData')]",
